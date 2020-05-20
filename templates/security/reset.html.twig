@@ -12,22 +12,25 @@
     <div class="col">
         <div class="row justify-content-md-center">
             <div class="col-lg-4 col-md-12">
-                {{ form_start(form) }}
+                <div class="card mt-5">
+                    <div class="card-body">
+                        {{ form_start(form) }}
 
-                <h1 class="h3 mb-3 mt-4 font-weight-normal">Reset your password</h1>
-                <p class="">Create a new password below. It must contain at least 5 characters.</p>
+                        <h1 class="h3 mb-3 font-weight-normal">Reset your password</h1>
+                        <p class="">Create a new password below. It must contain at least 5 characters.</p>
 
-                {% if error %}
-                        <div class="alert alert-danger">{{ error.message_data }}</div>
-                    {% endif %}
-                    {{ form_rest(form) }}
-                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                        Submit
-                    </button>
-                {{ form_end(form) }}
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.message_data }}</div>
+                        {% endif %}
+                        {{ form_rest(form) }}
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Submit
+                        </button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
 

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-final class Member implements UserInterface
+class Member implements UserInterface
 {
     use BaseEntity;
 
@@ -145,7 +145,7 @@ final class Member implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every member at least has ROLE_USER
-        $roles[] = 'ROLE_MEMBER';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }

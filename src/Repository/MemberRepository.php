@@ -30,8 +30,8 @@ class MemberRepository extends BaseRepository implements UserProviderInterface
      */
     public function findOneByEmail(string $email)
     {
-        return $this->createQueryBuilder('member')
-            ->andWhere('member.email = :val')
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.email = :val')
             ->setParameter('val', $email)
             ->getQuery()
             ->getOneOrNullResult()
