@@ -6,6 +6,9 @@ use App\Entity\Member;
 use App\Entity\MemberNumber;
 use App\Form\RegistrationFormType;
 use App\Form\SubscriptionFormType;
+use App\Form\UnsubscribeConfirmFormType;
+use App\Form\UnsubscribeFormType;
+use App\Repository\MemberRepository;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,8 +48,7 @@ class RegistrationController extends AbstractController
                 ->htmlTemplate('emails/Registration/NewSubscriber/welcome.html.twig')
                 ->context([
                     'user' => $user,
-                ])
-            ;
+                ]);
 
             $mailer->send($email);
 
@@ -151,6 +153,101 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/unsubscribe", name="app_unsubscribe")
+     */
+    public function unsubscribe(Request $request, MemberRepository $memberRepository, MailerInterface $mailer)
+    {
+        $form = $this->createForm(UnsubscribeFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $data = $form->getData();
+
+            $member = $memberRepository->findOneBy([
+                'email' => $data['email'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+            ]);
+
+            if ($member === null) {
+                $error = new FormError('Unable to find requested account.');
+                $form->addError($error);
+            }
+
+            if ($form->isValid()) {
+
+                //Send an email to the person who wants to unsubscribe. This way only the owner of the email can unsubscribe
+                $email = (new TemplatedEmail())
+                    ->from(new Address('SomeGuysBackyard@gmail.com', 'Some Guy\'s Backyard'))
+                    ->to(new Address($member->getEmail(), $member->getName()))
+                    ->priority(Email::PRIORITY_NORMAL)
+                    ->subject('Unsubscribe from Some Guy\'s Backyard')
+                    ->htmlTemplate('emails/Registration/Unsubscribe/unsubscribe.html.twig')
+                    ->context([
+                        'id' => $member->getId(),
+                    ]);
+
+                $mailer->send($email);
+
+                return $this->render('registration/unsubscribe_email_sent.html.twig');
+            }
+        }
+
+        return $this->render('registration/unsubscribe.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/unsubscribe/confirm/{id}", name="app_unsubscribe_confirm")
+     */
+    public function unsubscribeConfirm(Member $member, Request $request)
+    {
+        $form = $this->createForm(UnsubscribeConfirmFormType::class, $member);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $error = null;
+            if ($member === null) {
+                $error = 'No account found.';
+            } else {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($member);
+                $entityManager->flush();
+            }
+
+            return $this->render('registration/unsubscribe_successful.html.twig', [
+                'error' => $error,
+            ]);
+        }
+
+        return $this->render('registration/unsubscribe_confirm.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/unsubscribe/{id}", name="app_unsubscribe_remove")
+     */
+    public
+    function removeAccount(Member $member)
+    {
+        $error = null;
+
+        if ($member === null) {
+            $error = 'No account found.';
+        } else {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($member);
+            $entityManager->flush();
+        }
+
+        return $this->render('registration/unsubscribe_successful.html.twig', [
+            'error' => $error
         ]);
     }
 }

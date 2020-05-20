@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Unsubscribe{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-9 col-md-12">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h1>Unsubscribe</h1>
+                    <p>To unsubscribe from SGB, please enter the name and email you gave us when you subscribed. You will be prompted to unsubscribe if we can pull up your account.</p>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col">
+                            {{ form_row(form.firstName) }}
+                        </div>
+                        <div class="col">
+                            {{ form_row(form.lastName) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            {{ form_row(form.email) }}
+                        </div>
+                    </div>
+
+                    {{ form_rest(form) }}
+
+                    <button class="btn btn-primary" type="submit">Unsubscribe</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

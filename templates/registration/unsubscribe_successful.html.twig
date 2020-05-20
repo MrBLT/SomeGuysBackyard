@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Unsubscribe{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-9 col-md-12">
+            <div class="card mt-5">
+                <div class="card-body">
+                    {% if error is null %}
+                    <h1>Account Removed</h1>
+                    <p>We have removed your account. You may now close this page.</p>
+                    {% else %}
+                    <h1>There was a problem</h1>
+                    <p>{{ error }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
