@@ -15,12 +15,15 @@ use App\Security\LoginFormAuthenticator;
 use App\Security\RolesRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
 use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -29,16 +32,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct()
-    {
-        $transport = new GmailSmtpTransport('user', 'pass');
-        $this->mailer = new Mailer($transport);
-    }
 
     /**
      * @Route("/login", name="app_login")
@@ -72,12 +65,14 @@ class SecurityController extends AbstractController
     /**
      * @Route("/forgot", name="app_forgot")
      *
-     * @param Request          $request
+     * @param Request $request
      * @param MemberRepository $userRepository
      *
+     * @param MailerInterface $mailer
      * @return Response
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function forgot(Request $request, MemberRepository $userRepository)
+    public function forgot(Request $request, MemberRepository $userRepository, MailerInterface $mailer)
     {
         $form = $this->createForm(PasswordForgotType::class);
         $form->handleRequest($request);
@@ -92,7 +87,7 @@ class SecurityController extends AbstractController
             try {
                 $user = $userRepository->loadUserByUsername($email);
             } catch (NonUniqueResultException $e) {
-                $error = ['message_data' => 'Duplicate Accounts detected. Please Contact helpdesk@vortexglobal.com'];
+                $error = ['message_data' => 'Duplicate Accounts detected. Please Contact someguysbackyard@gmail.com'];
 
                 return $this->render(
                     'security/forgot.html.twig',
@@ -105,7 +100,7 @@ class SecurityController extends AbstractController
 
             //If user is null it was not found. send error message
             if (null === $user) {
-                $error = ['message_data' => 'Email does not exist in our database! Contact helpdesk@vortexglobal.com for assistance if needed.'];
+                $error = ['message_data' => 'Email does not exist in our database! Contact someguysbackyard@gmail.com for assistance if needed.'];
 
                 return $this->render(
                     'security/forgot.html.twig',
@@ -125,28 +120,18 @@ class SecurityController extends AbstractController
             $em->persist($passwordResetRequest);
             $em->flush();
 
-            //Send an email
-            $email = new Email();
-            $email
-                ->to($user->getEmail())
-                ->html(
-                    $this->renderView('emails/ResetPassword/forgot.html.twig', [
-                        'passwordResetRequest' => $passwordResetRequest,
-                        'user' => $user,
-                    ])
-                );
-            // $message = (new \Swift_Message('Reset your Intranet password'))
-            //     ->setFrom('intranet@vortexglobal.com')
-            //     ->setTo($user->getEmail())
-            //     ->setReplyTo('it@vortexglobal.com')
-            //     ->setBody(
-            //         $this->renderView('emails/ResetPassword/forgot.html.twig', [
-            //             'passwordResetRequest' => $passwordResetRequest,
-            //             'user' => $user,
-            //         ]),
-            //         'text/html'
-            //     );
-            $this->mailer->send($email);
+            $email = (new TemplatedEmail())
+                ->from(new Address('SomeGuysBackyard@gmail.com', 'Some Guy\'s Backyard'))
+                ->to(new Address($user->getEmail(), $user->getName()))
+                ->priority(Email::PRIORITY_NORMAL)
+                ->subject('Reset your SGB Account Password')
+                ->htmlTemplate('emails/Registration/ForgotPassword/forgot_password.html.twig')
+                ->context([
+                    'passwordResetRequest' => $passwordResetRequest,
+                    'user' => $user,
+                ]);
+
+            $mailer->send($email);
 
             //Render the notification saying the email was sent.
             return $this->render('security/forgot_sent.html.twig', [
@@ -166,12 +151,12 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset/{id}", name="app_reset")
      *
-     * @param PasswordResetRequest         $passwordResetRequest
-     * @param MemberRepository             $userRepository
-     * @param Request                      $request
+     * @param PasswordResetRequest $passwordResetRequest
+     * @param MemberRepository $userRepository
+     * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler    $guardHandler
-     * @param LoginFormAuthenticator       $formAuthenticator
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $formAuthenticator
      *
      * @return Response
      *
@@ -184,13 +169,14 @@ class SecurityController extends AbstractController
                           GuardAuthenticatorHandler $guardHandler,
                           LoginFormAuthenticator $formAuthenticator,
                           AuthenticationUtils $authenticationUtils
-    ) {
+    )
+    {
         //Handle expired password reset requests
         if ($passwordResetRequest->isExpired()) {
             $lastUsername = $authenticationUtils->getLastUsername();
             $error = [
                 'messageKey' => 'The password reset request has expired. Please click Forgot Password again to re-try.',
-                'messageData' => ['en' => 'The password reset request has expired. Please click Forgot Password again to re-try.'], ];
+                'messageData' => ['en' => 'The password reset request has expired. Please click Forgot Password again to re-try.'],];
 
             return $this->render('security/login.html.twig', [
                 'last_username' => $lastUsername,
@@ -203,7 +189,7 @@ class SecurityController extends AbstractController
             $lastUsername = $authenticationUtils->getLastUsername();
             $error = [
                 'messageKey' => 'The password reset request was already fulfilled. Please click Forgot Password again to re-try, or contact helpdesk@vortexglobal.com for assistance.',
-                'messageData' => ['en' => 'The password reset request has expired. Please click Forgot Password again to re-try.'], ];
+                'messageData' => ['en' => 'The password reset request has expired. Please click Forgot Password again to re-try.'],];
 
             return $this->render('security/login.html.twig', [
                 'last_username' => $lastUsername,
@@ -271,18 +257,19 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/invite", name="security_invite")
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      *
      * @param Request $request
      * @param MemberInvitationManager $repository
      *
+     * @param MailerInterface $mailer
      * @return Response
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function invite(Request $request, MemberInvitationManager $repository)
+    public function invite(Request $request, MemberInvitationManager $repository, MailerInterface $mailer)
     {
         $form = $this->createForm(InviteUserFormType::class);
 
@@ -311,18 +298,19 @@ class SecurityController extends AbstractController
             $invitation->setRoles($roles);
             $repository->addInvitation($invitation);
 
-            //Send Email
-            $message = new Email();
-            $message
-                ->to($invitation->getEmail())
-                ->html(
-                    $this->renderView('emails/NewAdmin/new_admin.html.twig', [
-                        'invitation' => $invitation,
-                        'user' => $user,
-                    ])
-                );
 
-            $this->mailer->send($message);
+            $email = (new TemplatedEmail())
+                ->from(new Address('SomeGuysBackyard@gmail.com', 'Some Guy\'s Backyard'))
+                ->to(new Address($user->getEmail(), $user->getName()))
+                ->priority(Email::PRIORITY_NORMAL)
+                ->subject('You have been invited to Some Guy\'s Backyard')
+                ->htmlTemplate('emails/Registration/Invitation/invitation.html.twig')
+                ->context([
+                    'invitation' => $invitation,
+                    'user' => $user,
+                ]);
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('easyadmin', ['entity' => 'Member']);
             // return $this->render('emails/NewAdmin/new_admin.html.twig',[
@@ -339,11 +327,11 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register/{id}", name="app_register_invitation")
      *
-     * @param MemberInvitation             $invitation
-     * @param Request                      $request
+     * @param MemberInvitation $invitation
+     * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler    $guardHandler
-     * @param LoginFormAuthenticator       $formAuthenticator
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $formAuthenticator
      *
      * @return Response|null
      */
@@ -354,7 +342,7 @@ class SecurityController extends AbstractController
             $lastUsername = '';
             $error = [
                 'messageKey' => 'The invitation has already been fulfilled. Please contact your system administrator for assistance.',
-                'messageData' => ['english' => 'The invitation has already been fulfilled. Please contact your system administrator for assistance.'], ];
+                'messageData' => ['english' => 'The invitation has already been fulfilled. Please contact your system administrator for assistance.'],];
 
             return $this->render('security/login.html.twig', [
                 'last_username' => $lastUsername,
