@@ -1,0 +1,11 @@
+easy_admin:
+  design:
+    form_theme:
+      - '@EasyAdmin/form/bootstrap_4.html.twig'
+      - 'components/_easyadmin_form_theme.html.twig'
+  formats:
+    date: 'd/m/Y'
+    datetime: 'd M y H:i'
+  entities:
+    Member:
+      class: App\Entity\Member

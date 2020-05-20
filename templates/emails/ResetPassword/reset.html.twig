@@ -1,0 +1,12 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block summary %}{{ summary }}{% endblock %}
+
+{% block header %}{{ header }}{% endblock %}
+{% block intro %}{% endblock %}
+{% block content %}
+    {#<strong style="font-weight: bold;">Files 26 MB Total</strong><br>#}
+    Please click the button below to reset your password.
+{% endblock %}
+{% block buttontext %}Reset Password Now{% endblock %}
+{% block buttonlink %}{{ url('app_forgot_reset',{token:uuid}) }}{% endblock %}

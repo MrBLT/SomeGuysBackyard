@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Login'} %}
+{% block title %}{{ vars.title }}{% endblock %}
+{% block page_title %}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-5">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <form class="form-signin" method="post" action="{{ path('app_login') }}" method="post">
+                        <h4 class=" mb-3 font-weight-normal card-title">Sign in to view your profile</h4>
+                        <p class="">Your credentials are specific to this website</p>
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <label for="inputEmail" class="sr-only">Email address</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                               class="form-control mb-3" placeholder="Email address" required autofocus>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control mb-3"
+                               placeholder="Password" required>
+
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}"
+                        >
+                        <div class="row">
+                            <div class="col">
+                                <div class="checkbox mb-3">
+                                    <label>
+                                        <input type="checkbox" name="_remember_me"> Remember me
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <a href="{{ path('app_forgot') }}" class="float-right">Forgot Password?</a>
+                            </div>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

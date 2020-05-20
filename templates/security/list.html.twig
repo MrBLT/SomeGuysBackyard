@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Admin Users'} %}
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet" href="{{ asset('build/homepage.css') }}">#}
+{#{% endblock %}#}
+
+{% block title %}{{ vars.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block page_title %}<h4>{{ vars.title }}</h4>{% endblock %}
+{% block page_toolbar %}
+    <div class="btn-group btn-group" role="group"><a href="{{ path('security_invite') }}" role="button" class="btn btn-primary">Invite New User</a></div>
+{% endblock %}
+{% block body %}
+    <div class="col-md-10 offset-md-1">
+        <table class="table table-striped table-hover table-dark rounded-lg">
+            <thead class="bg-info">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Email</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                                            <a class="btn btn-sm btn-primary my-0 py-0" href="{{ path('security_delete',{'id':user.id}) }}">Remove</a>
+{#                        <div class="btn-group" role="group"><a role="button" class="btn btn-sm btn-primary">Delete</a></div>#}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{#{% block javascripts %}{{ parent() }}{% endblock %}#}

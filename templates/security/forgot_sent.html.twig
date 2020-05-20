@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Password Reset Email Sent'} %}
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet" href="{{ asset('build/homepage.css') }}">#}
+{#{% endblock %}#}
+
+{% block title %}{{ vars.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block page_title %}{% endblock %}
+{% block body %}
+    <div class="col">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h3 mb-3 mt-4 font-weight-normal">{{ user.firstName }}, Check your email!</h1>
+                        <p class="">We've sent you a link to reset your password. Better hurry! The link expires in 24 hours.</p>
+                        <a href="{{ path('app_homepage') }}">Return Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{#{% block javascripts %}{{ parent() }}{% endblock %}#}

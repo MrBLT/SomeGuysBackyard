@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Reset Password'} %}
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet" href="{{ asset('build/homepage.css') }}">#}
+{#{% endblock %}#}
+
+{% block title %}{{ vars.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block page_title %}<h4>{{ vars.title }}</h4>{% endblock %}
+{% block body %}
+    <div class="col">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-4 col-md-12">
+                {{ form_start(form) }}
+
+                <h1 class="h3 mb-3 mt-4 font-weight-normal">Reset your password</h1>
+                <p class="">Create a new password below. It must contain at least 5 characters.</p>
+
+                {% if error %}
+                        <div class="alert alert-danger">{{ error.message_data }}</div>
+                    {% endif %}
+                    {{ form_rest(form) }}
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                        Submit
+                    </button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{#{% block javascripts %}{{ parent() }}{% endblock %}#}

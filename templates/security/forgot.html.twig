@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Forgot Password'} %}
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet" href="{{ asset('build/homepage.css') }}">#}
+{#{% endblock %}#}
+
+{% block title %}{{ vars.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block body %}
+        <div class="row justify-content-md-center">
+            <div class="col-xl-5 col-md-12">
+                <div class="card mt-5">
+
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        <h1 class="h3 mb-3 font-weight-normal">Request a password reset</h1>
+                        <p class="">Enter your work email below. If it exists in our database, you will recieve an email to reset your password.</p>
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.message_data }}</div>
+                        {% endif %}
+                        {{ form_row(form.email) }}
+                        {{ form_rest(form) }}
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                            Submit
+                        </button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{#{% block javascripts %}{{ parent() }}{% endblock %}#}

@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thank you{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-9 col-md-12">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2>Welcome to SGB!</h2>
+                    <p>Congrats %name%! You are now subscribed. We've sent you an email to you containing all the info
+                        that you need. If you'd like, you can also view your membership certificate here</p>
+                    <div class="row">
+                        <div class="col text-center">
+                            <button class="btn btn-secondary">View Membership Certificate</button>
+                        </div>
+                    </div>
+                    <p class="mt-3">Only your subscription is required to be considererd a member of SGB. However, if you would like
+                        to go one step further with us, feel free to setup a full account by adding a password!</p>
+                    <div class="row">
+                        <div class="col text-center">
+
+                            <a href="{{ path('app_register_subscriber', {'id' : user.id}) }}">
+                                <button class="btn btn-secondary">Register a Full Account</button>
+                            </a>
+                        </div>
+                        <div class="col text-center">
+                            <a href="https://www.someguysbackyard.com/"><button class="btn btn-secondary">Return Home</button></a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">{{ dump(user) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

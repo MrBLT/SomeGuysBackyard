@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% set vars = {'title' : 'Invite User'} %}
+{#{% block stylesheets %}#}
+    {#{{ parent() }}#}
+    {#<link rel="stylesheet" href="{{ asset('build/homepage.css') }}">#}
+{#{% endblock %}#}
+
+{% block title %}{{ vars.title }}{% endblock %}
+{% block stylesheets %}{{ parent() }}{% endblock %}
+{% block page_title %}{% endblock %}
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-6 col-lg-7 col-md-9">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2 class="card-title">Invite SGB Member</h2>
+                    <p>Invite someone to register a membership, and assign roles for the member. Invitations expire 30 days after
+                        the
+                        invite is sent.</p>
+                    {{ form_start(inviteForm) }}
+                    <div class="row">
+                        <div class="col-md-6">{{ form_row(inviteForm.firstName) }}</div>
+                        <div class="col-md-6">{{ form_row(inviteForm.lastName) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col">{{ form_row(inviteForm.email) }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><p>Role(s)</p>
+                            {{ form_rest(inviteForm) }}
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                Send Invitation
+                            </button>
+                        </div>
+                    </div>
+                    {{ form_end(inviteForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}{{ parent() }}{% endblock %}

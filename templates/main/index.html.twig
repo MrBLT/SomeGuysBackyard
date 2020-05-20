@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Some Guy's Backyard{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-9 col-md-12">
+            <div class="card mt-5">
+                <div class="card-header">Some Guy's Backyard Membership Portal</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p>Are you new here?</p>
+                            <a href="{{ path('app_subscribe') }}"><div class="btn btn-primary">Subscribe</div></a></div>
+                        <div class="col">
+                            <p>Welcome back baby!</p>
+                            <a href="{{ path('app_login') }}"><div class="btn btn-primary">Log In</div></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

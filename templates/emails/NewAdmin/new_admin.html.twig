@@ -1,0 +1,28 @@
+{% extends 'emails/base_email.html.twig' %}
+
+{% block summary %}You have been invited to create an account for the Vortex Intranet. Setup this account to manage Intranet pages relative to your department.{% endblock %}
+{% block hidden_preheader %}{{ user.firstName }} {{ user.lastName }} has invited you to create an account for the Vortex Intranet.{% endblock %}
+{% block header %}{% endblock %}
+{% block intro %}Welcome, {{ invitation.firstName }}{% endblock %}
+{% block content %}
+    {#<strong style="font-weight: bold;">Files 26 MB Total</strong><br>#}
+    {{ user.firstName }} {{ user.lastName }} has invited you to create an account for the Vortex Intranet.<br>
+    Setup this account to manage pages related to your department.<br>
+    Please click the link below to register your account before <strong style="font-weight: bold;">{{ invitation.expirationDate | date }}</strong>
+{% endblock %}
+{% block buttontext %}Setup{% endblock %}
+{% block buttonlink %}{{ url('app_register',{'id':invitation.id}) }}{% endblock %}
+{% block list_header %}Your role(s) on the intranet are as follows{% endblock %}
+{% block list_items %}
+    {% for role in invitation.roles %}
+        {% if loop.first and loop.last %}
+            <li style="margin:0 0 10px 30px;" class="list-item-first list-item-last">{{ role }}</li>
+        {% elseif loop.first %}
+            <li style="margin:0 0 10px 30px;" class="list-item-first">{{ role }}</li>
+        {% elseif loop.last%}
+            <li style="margin: 0 0 0 30px;" class="list-item-last">{{ role }}</li>
+        {% else %}
+            <li style="margin:0 0 10px 30px;">{{ role }}</li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
