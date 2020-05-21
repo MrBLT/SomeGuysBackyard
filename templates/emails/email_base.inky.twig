@@ -1,0 +1,43 @@
+{% apply inky_to_html|inline_css(source('@styles/foundation-emails.css'), source('@styles/email.css')) %}
+    <container>
+        <row class="header">
+            <columns>
+                <a href="{{ url('app_homepage') }}">
+                    <img src="{{ email.image('@images/email/logo.png') }}" class="logo" alt="SpaceBar Logo">
+                </a>
+            </columns>
+        </row>
+        {% block body %}{% endblock %}
+        <wrapper class="secondary">
+
+            <spacer size="16"></spacer>
+
+            <row>
+                <columns large="6">
+                    <h5>Connect With Us:</h5>
+                    <button class="facebook expand" href="https://www.facebook.com/SomeGuysBackyard">Facebook</button>
+                    <button class="twitter expand" href="https://twitter.com/someguysbackyrd">Twitter</button>
+                    <button class="instagram expand" href="https://www.instagram.com/someguysbackyard/">Instagram</button>
+                </columns>
+                <columns large="6">
+                    <h5>Contact Info:</h5>
+                    <a href="https://www.someguysbackyard.com"><p><strong>Some Guy's Backyard</strong></p></a>
+                    <a href="https://goo.gl/maps/nzVX2WDbn8DP1tnFA">
+                        <p>4429 N. 79th St.</p>
+                        <p>Kansas City, KS 66109</p>
+                    </a>
+                    <p><a href="tel:8603349785">(860) 334-9785</a></p>
+                    <p><a href="mailto:someguysbackyard@gmail.com">someguysbackyard@gmail.com</a></p>
+                </columns>
+            </row>
+
+            <center>
+                <menu>
+                    <item href="{{ url('app_terms') }}">Terms</item>
+                    <item href="{{ url('app_terms') }}">Privacy</item>
+                    <item href="{{ url('app_unsubscribe') }}">Unsubscribe</item>
+                </menu>
+            </center>
+        </wrapper>
+    </container>
+{% endapply %}

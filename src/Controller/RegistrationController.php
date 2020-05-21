@@ -34,6 +34,8 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setFirstName(ucwords($user->getFirstName()));
+            $user->setLastName(ucwords($user->getLastName()));
             $user->setMemberNumber(new MemberNumber());
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -45,7 +47,8 @@ class RegistrationController extends AbstractController
                 ->to(new Address($user->getEmail(), $user->getName()))
                 ->priority(Email::PRIORITY_NORMAL)
                 ->subject('Welcome to Some Guy\'s Backyard!')
-                ->htmlTemplate('emails/Registration/NewSubscriber/welcome.html.twig')
+                // ->htmlTemplate('emails/Registration/NewSubscriber/welcome.html.twig')
+                ->htmlTemplate('emails/NewSubScriber/welcome.inky.twig')
                 ->context([
                     'user' => $user,
                 ]);

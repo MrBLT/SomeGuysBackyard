@@ -12,27 +12,27 @@
                         <div class="col">
                             <p>Are you new here?</p>
                             <a href="{{ path('app_subscribe') }}">
-                                <div class="btn btn-primary">Subscribe</div>
+                                <div class="btn btn-secondary">Subscribe</div>
                             </a>
                         </div>
                         <div class="col">
                             <p>Already subscribed but want an account?</p>
                             <a href="{{ path('app_register') }}">
-                                <div class="btn btn-primary">Register Full Account</div>
+                                <div class="btn btn-secondary">Register Full Account</div>
                             </a>
                         </div>
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <div class="col">
                             <p>View your Profile!</p>
                             <a href="{{ path('app_profile') }}">
-                                <div class="btn btn-primary">View Profile</div>
+                                <div class="btn btn-secondary">View Profile</div>
                             </a>
                         </div>
                         {% else %}
                             <div class="col">
                                 <p>Welcome back baby!</p>
                                 <a href="{{ path('app_login') }}">
-                                    <div class="btn btn-primary">Log In</div>
+                                    <div class="btn btn-secondary">Log In</div>
                                 </a>
                             </div>
                         {% endif %}
@@ -40,7 +40,7 @@
                             <div class="col">
                                 <p>Special Admin Stuff!</p>
                                 <a href="{{ path('easyadmin') }}">
-                                    <div class="btn btn-primary">Admin</div>
+                                    <div class="btn btn-secondary">Admin</div>
                                 </a>
                             </div>
                         {% endif %}
