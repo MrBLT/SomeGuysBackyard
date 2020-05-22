@@ -1,53 +1,44 @@
 {% extends 'emails/email_base.inky.twig' %}
 
 {% block body %}
-    <row class="welcome">
-        <columns>
-            <spacer size="35"></spacer>
-            <h1>
-                <center>
-                    Nice to meet you {{ email.toName }}!
-                </center>
-            </h1>
-            <spacer size="10"></spacer>
-        </columns>
-    </row>
     <spacer size="30"></spacer>
     <row>
         <columns>
             <p>
-                Welcome to <strong>the Space Bar</strong>, we can't wait to read what you have to write.
-                Get started on your first article and connect with the space bar community.
+                Welcome to <strong>Brough Creek National</strong> {{ user.firstName }}! You are Member
+                Number {{ user.memberNumber }}. You can view your membership certificate by clicking the button below.
+                It will eventually also be attached to this email.
             </p>
         </columns>
     </row>
     <row>
         <columns>
             <center>
-                <button href="{{ url('app_register_subscriber', { id : user.id }) }}">Get writing!</button>
+                <button href="{{ url('app_membership_certificate', { id : user.id }) }}">View Membership Certificate!
+                </button>
             </center>
         </columns>
     </row>
     <row>
         <columns>
             <p>
-                Check out our existing articles and share your thoughts in the comments!
+                Get more involved by creating a full account!
             </p>
         </columns>
     </row>
     <row>
         <columns>
             <center>
-                <button href="{{ url('app_homepage') }}">Get reading!</button>
+                <button href="{{ url('app_register_subscriber', { id : user.id }) }}">Create a Full Account!</button>
             </center>
         </columns>
     </row>
     <row>
         <columns>
             <p>
-                We're so excited that you've decided to join us in our corner of the universe,
-                it's a friendly one with other creative and insightful writers just like you!
-                Need help from a friend? We're always just a message away.
+                We're so excited that you've decided to join us in our corner of the world!
+                Feel free to check us out on any of the platforms below and reach out if you'd like to! We're always
+                just a message away.
             </p>
         </columns>
     </row>

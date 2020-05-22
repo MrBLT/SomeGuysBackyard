@@ -2,22 +2,23 @@
     <container>
         <row class="header">
             <columns>
+                <spacer size="16"></spacer>
                 <a href="{{ url('app_homepage') }}">
-                    <img src="{{ email.image('@images/email/logo.png') }}" class="logo" alt="SpaceBar Logo">
+                    <img src="{{ email.image('@images/email/logo.png') }}" class="logo" alt="BCN Logo">
                 </a>
             </columns>
         </row>
         {% block body %}{% endblock %}
-        <wrapper class="secondary">
+        <wrapper class="footer secondary">
 
             <spacer size="16"></spacer>
 
             <row>
                 <columns large="6">
                     <h5>Connect With Us:</h5>
-                    <button class="facebook expand" href="https://www.facebook.com/SomeGuysBackyard">Facebook</button>
-                    <button class="twitter expand" href="https://twitter.com/someguysbackyrd">Twitter</button>
                     <button class="instagram expand" href="https://www.instagram.com/someguysbackyard/">Instagram</button>
+                    <button class="twitter expand" href="https://twitter.com/someguysbackyrd">Twitter</button>
+                    <button class="facebook expand" href="https://www.facebook.com/SomeGuysBackyard">Facebook</button>
                 </columns>
                 <columns large="6">
                     <h5>Contact Info:</h5>

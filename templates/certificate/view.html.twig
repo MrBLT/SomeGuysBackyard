@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Thank you{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-xl-9 col-md-12">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <h2>Welcome to SGB!</h2>
+                    <p>Congrats {{ user.firstName }}! You are Member Number {{ user.memberNumber }}.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'emails/email_base.inky.twig' %}
+
+{% block body %}
+    <row>
+        <columns>
+            <spacer size="16"></spacer>
+
+            <h2 class="text-center">Parting is such sweet sorrow.</h2>
+
+            <spacer size="16"></spacer>
+
+            <p class="text-center">We recieved a request to remove your account from Some Guy's Backyard. If
+                you submitted this request, you can click the button below to unsubscribe.</p>
+
+            <spacer size="16"></spacer>
+
+            <button class="large expand" href="{{ url('app_unsubscribe_confirm',{'id':id}) }}">Unsubscribe</button>
+
+        </columns>
+    </row>
+{% endblock %}

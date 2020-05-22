@@ -1,0 +1,31 @@
+{% extends 'emails/email_base.inky.twig' %}
+
+{% block body %}
+    <spacer size="30"></spacer>
+    <row>
+        <columns>
+            <h2 class="text-center">You've been invited!</h2>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <center>
+                <img src="{{ email.image('@images/email/flag.png') }}" alt="BCN Flag">
+            </center>
+
+            <spacer size="16"></spacer>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <p>{{ user.firstName }} {{ user.lastName }} has invited you to subscribe to Some Guy's Backyard! Click the link below to join us.</p>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <center>
+                <button href="{{ url('app_subscribe') }}">Subscribe!</button>
+            </center>
+        </columns>
+    </row>
+{% endblock %}

@@ -189,7 +189,7 @@ class RegistrationController extends AbstractController
                     ->to(new Address($member->getEmail(), $member->getName()))
                     ->priority(Email::PRIORITY_NORMAL)
                     ->subject('Unsubscribe from Some Guy\'s Backyard')
-                    ->htmlTemplate('emails/Registration/Unsubscribe/unsubscribe.html.twig')
+                    ->htmlTemplate('emails/Unsubscribe/unsubscribe.inky.twig')
                     ->context([
                         'id' => $member->getId(),
                     ]);
